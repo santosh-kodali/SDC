@@ -1,3 +1,2 @@
-abCd
-AbcD
-abcD
+abCD
+Abcd

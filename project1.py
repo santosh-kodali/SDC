@@ -20,7 +20,7 @@ print(input2)
 
 for i in range(len(input1)) :
 	for j in range(len(order)):
-		input2[i][j]="11"
+		
 		if order[j] in input1[i]:     	
 			input2[i][j]='01'
 		print (ord(order[j]))	
