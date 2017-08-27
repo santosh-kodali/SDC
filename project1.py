@@ -10,7 +10,7 @@ file=open("input.txt","r")        #complements are represented with capital lett
 input1=file.readlines()
 
 
-for i in range(len(input1)) :
+for i in range(len(input1)):
 	input1[i]=list(input1[i][:-1])
 print(input1)
 input1 = np.array(input1,dtype='object')
@@ -18,7 +18,7 @@ print(input1)
 input2=input1.copy()
 print(input2)
 
-for i in range(len(input1)) :
+for i in range(len(input1)):
 	for j in range(len(order)):
 		
 		if order[j] in input1[i]:     	
