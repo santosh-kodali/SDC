@@ -15,7 +15,7 @@ print(len(input1))
 #out_i = [None]*int(numbers)
 #output = [out_i]*len(input1)
 print(int(numbers))
-output = [[0 for x in range(int(numbers))] for y in range(len(input1))] 
+output = [[0 for y in range(int(numbers))] for x in range(len(input1))] 
 
 print(input1)	
 print(output)
