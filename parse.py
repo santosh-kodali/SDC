@@ -25,7 +25,6 @@ class Node:
         self.value = newdata
     
 class tree:
-
     def __init__(self):
         self.head = None
     def isEmpty(self):
@@ -55,12 +54,7 @@ class tree:
     	if(node.getlChild()!=None):
     		self.show(node.getlChild())
     		self.show(node.getrChild())
-			
-		
-         
-        
-
-
+    		
 
 #print ("Enter number of variabes") #number of variables the function is dependent on
 #numbers = input()
