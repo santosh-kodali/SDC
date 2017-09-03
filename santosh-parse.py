@@ -1,11 +1,16 @@
 import numpy as np
 import copy
+from graphviz import Digraph
+
 class Node:
-    def __init__(self,initvalue,initdata):
+    def __init__(self,initvalue,initlvl,initdata):
         self.data = initdata
         self.value= initvalue
+        self.level = initlvl
         self.lchild = None
         self.rchild = None
+        self.logic = None
+        self.id = None
     def getData(self):
         return self.data
     def getValue(self):
@@ -14,6 +19,14 @@ class Node:
         return self.lchild
     def getrChild(self):
         return self.rchild
+    def getlogic(self):
+    	return self.logic
+    def getId(self):
+    	return self.id
+    def getlvl(self):
+    	return self.level
+
+
 
 
     def setData(self,newdata):
@@ -24,40 +37,64 @@ class Node:
         self.rchild = newdata
     def setValue(self,newdata):
         self.value = newdata
+    def setLogic(self,newdata):
+    	self.logic = newdata
+    def setId(self,newdata):
+    	self.id = newdata
+    def setlvl(self,newdata):
+    	self.level = newdata
     
 class tree:
+
     def __init__(self):
         self.head = None
+       
+    
+    def gethead(self):
+    	return self.head
     def isEmpty(self):
         return self.head == None
-    def split(self,node,value,array):
+    def split(self,node,value,level,array,counter):
     	if(node.getlChild()!=None):
-    		self.split(node.getlChild(),value,array)
-    		self.split(node.getrChild(),value,array)
+    		self.split(node.getlChild(),value,level,array,counter)
+    		self.split(node.getrChild(),value,level,array,counter)
     	else:
     		
-    		newNode = Node(value,array.copy())
+    		newNode = Node(value+str(counter[0]),level,array.copy())
     		node.setlChild(newNode)
+    		counter[0] = counter[0] + 1
     	
-    		newNode2 = Node(value,array.copy())
+    		newNode2 = Node(value+str(counter[0]),level,array.copy())
     		node.setrChild(newNode2)
+    		counter[0] = counter[0] + 1
 
 
-    def add(self,value,array):
-        if (self.head == None):
-        	newNode = Node(value,array)
+
+    def add(self,value,level,array):
+    	counter = [0]
+    	if (self.head == None):
+        	newNode = Node(value,level,array)
         	self.head = newNode
-        else:
-        	self.split(self.head,value,array)
-    def callshow(self):
+    	else:
+        	self.split(self.head,value,level,array,counter)
+    def callshow(self,dot):
     	if(self.head!=None):
-    		self.show(self.head)
-    def show(self,node):
-    	print(node.getValue())
-    	print(node.getData())
+    		self.show(self.head,dot)
+    def show(self,node,dot):
+    	dot.node(node.getValue(),node.getValue()+str(node.getData())+str(node.getlogic())+'\t'+ str(node.getId()))
+    	if(node.getlChild() != None):
+    		dot.edge(node.getValue(),node.getlChild().getValue())
+    		dot.edge(node.getValue(),node.getrChild().getValue())
+    	print("Value: %s"%node.getValue())
+    	print("Data: %s"%node.getData())
+    	if(node.getId() != None):
+    		print("Id: %s"%node.getId())
+    	if(node.getValue() == 'final'):
+    		print("Logic: %s"%node.getlogic())
+    	print("\n")
     	if(node.getlChild()!=None):
-    		self.show(node.getlChild())
-    		self.show(node.getrChild())
+    		self.show(node.getlChild(),dot)
+    		self.show(node.getrChild(),dot)
 
     def apply(self):
     	if(self.head != None):
@@ -127,6 +164,70 @@ class tree:
     		#self.callshow()
     		self.appl(node.getlChild(),index+1)
     		self.appr(node.getrChild(),index+1)
+    def setfinal(self,node):
+    	if(node != None):
+    		if 'final' in node.getValue():
+    			finalcheck = 0
+    			for x in node.getData():
+    				check = 1
+    				for y in x:
+    					if y == '00':
+    						check = 0
+    						break
+    				if(check == 1):
+    					finalcheck = 1
+    			if(finalcheck == 1):
+    				node.setLogic(1)
+    				node.setId(2)
+    			else:
+    				node.setLogic(0)
+    				node.setId(1)
+
+    		self.setfinal(node.getlChild())
+    		self.setfinal(node.getrChild())
+    
+    def firstloop(self,height):
+    	checkarray = []
+    	for i in reversed(range(height)):
+    	
+    		self.idsetting(self.head,i,checkarray)
+    	print(checkarray)
+    def idsetting(self,node,level,checkarray):
+    	if(node != None):
+    		self.idsetting(node.getlChild(),level,checkarray)
+    		self.idsetting(node.getrChild(),level,checkarray)
+
+    		if(node.getlvl() == level):
+    			left = node.getlChild().getId()
+    			right = node.getrChild().getId()
+    			if(left == right):
+    				sum = left
+    			else:
+    				sum = left + right
+    			sum = self.checkarr(checkarray,sum,left,right)
+    			node.setId(sum)
+    			checkarray.append([sum, left, right])
+    def checkarr(self, checkarray,sum,left,right):
+    	for x in checkarray:
+    		if (sum == x[0]):
+    			if (left != x[1] or right != x[2]):
+    				final = self.checkarr(checkarray,sum+1,left,right)
+    				return final
+    			
+    	return sum
+
+    			
+    		
+
+
+	    	
+
+
+
+
+
+
+
     		
   
 		
@@ -191,14 +292,22 @@ print(output[1])
 
 output = np.array(output,dtype='object')
 
-
+dot = Digraph(comment='OBDD')
 mytree = tree()
-for x in order:
-	mytree.add(x, output)
-mytree.add('e', output)
+for counter,x in enumerate(order):
+	
+	mytree.add(x,counter, output)
+height = counter +1
 
-mytree.callshow()
+mytree.add('final',height, output)
+
+
 mytree.apply()
-print("\n\n")
-mytree.callshow()
 
+
+mytree.setfinal(mytree.gethead())
+
+
+mytree.firstloop(height)
+mytree.callshow(dot)
+dot.render('test-output/OBDD', view=True)
