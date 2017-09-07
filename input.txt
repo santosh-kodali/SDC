@@ -1,2 +1,2 @@
-abc'ef
-a'bc'de'f
+ab'
+bcd'
