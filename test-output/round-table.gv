@@ -5,5 +5,5 @@ digraph {
 	L [label="Sir Lancelot the Brave"]
 	A -> B
 	A -> L
-	B -> L [constraint=false]
+	B -> L
 }
