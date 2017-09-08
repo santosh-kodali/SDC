@@ -239,3 +239,15 @@ class tree:
         return sum
         return sum
 
+    def ite(self, node):
+        if(node.getlogic() == 1 or node.getlogic() == 0):
+            print ( str(node.getlogic()) + ',' , end = '')
+            return node.getlogic()
+
+        print ("ite ( " + str(node.getValue()[:-1]) + ',', end = '')
+
+        self.ite(node.getrChild())
+        self.ite(node.getlChild())
+
+        print (')', end = '')
+

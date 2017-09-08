@@ -74,3 +74,7 @@ mytree.callshow_robdd(dot_robdd)   #display the tree
 print(dot_robdd.source)
 dot.render('test-output/OBDD', view=True)       #render full
 dot_robdd.render('ROBDD', view=True) #render reduced
+print ('\n\nITE: \n')
+mytree.ite(mytree.gethead())
+
+print ('\n')
