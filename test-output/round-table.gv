@@ -1,9 +1,6 @@
 // The Round Table
 digraph {
-	A [label="King Arthur"]
-	B [label="Sir Bedevere the Wise"]
-	L [label="Sir Lancelot the Brave"]
-	A -> B
-	A -> L
-	B -> L [constraint=false]
+	a [label=asdf]
+	a -> b
+	b [label=asfasdf]
 }
