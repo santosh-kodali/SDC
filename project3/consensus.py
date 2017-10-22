@@ -1,4 +1,70 @@
 import numpy as np
+
+def logical_and (A,B):
+	
+	if A=='00' or B=='00':
+			output1='00'
+	elif A=='01' and B=='01':
+			output1='01'
+	elif A=='01' and B=='10':
+			output1='00'
+	elif A=='10' and B=='10':
+			output1='10'
+	elif A=='10' and B=='01':
+			output1='00'
+	elif A=='01' and B=='11':
+			output1='01'
+	elif A=='11' and B=='01':
+			output1='01'
+	elif A=='10' and B=='11':
+			output1='10'
+	elif A=='11' and B=='10':
+			output1='10'
+	elif A=='11' and B=='11':
+			output1='11'
+
+	return output1
+
+
+def logical_or (A,B):
+	if A=='01' and B=='01':
+			output2='01'
+	elif A=='01' and B=='10':
+			output2='11'
+	elif A=='10' and B=='10':
+			output2='10'
+	elif A=='10' and B=='01':
+			output2='11'
+	elif A=='01' and B=='11':
+			output2='11'
+	elif A=='11' and B=='01':
+			output2='11'
+	elif A=='10' and B=='11':
+			output2='11'
+	elif A=='11' and B=='10':
+			output2='11'
+	elif A=='11' and B=='11':
+			output2='11'
+	elif A=='00' :
+			output2=B
+	elif B=='00':
+			output2=A
+
+
+	return output2
+
+def logical_not (A):
+	if A=='00':
+			output2='11'
+	elif A=='01' :
+			output2='10'
+	elif A=='10':
+			output2='01'
+	elif A=='11' :
+			output2='00'
+	return output2
+
+
 def consensus (list1,list2):
 
 	if len(list1) == len(list2):
@@ -15,70 +81,6 @@ def consensus (list1,list2):
 
 	else:
 		return
-
-def logical_and (A,B):
-	
-	
-	if A=='01' and B=='01':
-			output1='01'
-	if A=='01' and B=='10':
-			output1='00'
-	if A=='10' and B=='10':
-			output1='10'
-	if A=='10' and B=='01':
-			output1='00'
-	if A=='01' and B=='11':
-			output1='01'
-	if A=='11' and B=='01':
-			output1='01'
-	if A=='10' and B=='11':
-			output1='10'
-	if A=='11' and B=='10':
-			output1='10'
-	if A=='11' and B=='11':
-			output1='11'
-
-	return output1
-
-
-def logical_or (A,B):
-	if A=='01' and B=='01':
-			output2='01'
-	if A=='01' and B=='10':
-			output2='11'
-	if A=='10' and B=='10':
-			output2='10'
-	if A=='10' and B=='01':
-			output2='11'
-	if A=='01' and B=='11':
-			output2='11'
-	if A=='11' and B=='01':
-			output2='11'
-	if A=='10' and B=='11':
-			output2='11'
-	if A=='11' and B=='10':
-			output2='11'
-	if A=='11' and B=='11':
-			output2='11'
-	if A=='00' :
-			output2=B
-	if B=='00':
-			output2=A
-
-
-	return output2
-
-def logical_not (A):
-	if A=='01' :
-			output2='10'
-	if A=='10':
-			output2='01'
-	if A=='11' :
-			output2='00'
-	return output2
-
-
-
 
 
 def cofactor (list1,list2):
@@ -99,6 +101,41 @@ def cofactor (list1,list2):
 		return result
 
 
+def sharp (list1,list2):
+	if len(list1) == len(list2):
+
+		output = [[0 for y in range(len(list1))] for x in range(len(list1))]
+
+		for i in range(len(list1)):
+			for j in range(len(list1)):
+				if i == j:
+					output[i][j] = logical_and(list1[j],logical_not(list2[i]))
+				else:
+					output[i][j] = list1[j]
+
+		return output
+
+	else:
+		return
+
+def disjoint_sharp(list1,list2):
+	if len(list1) == len(list2):
+
+		output = [[0 for y in range(len(list1))] for x in range(len(list1))]
+
+		for i in range(len(list1)):
+			for j in range(len(list1)):
+				if i == j:
+					output[i][j] = logical_and(list1[j],logical_not(list2[i]))
+				elif i>j:
+					output[i][j] = logical_and(list1[j],list2[j])
+				else:
+					output[i][j] = list1[j]
+
+		return output
+
+	else:
+		return
 
 
 
@@ -107,9 +144,11 @@ def cofactor (list1,list2):
 
 
 
-list1=['01','10','01','01']
-list2=['01','10','11','11']
 
-consensus=consensus(list1,list2)
+
+list1=['11','11']
+list2=['01','01']
+
+consensus=disjoint_sharp(list1,list2)
 print (consensus)
-print(cofactor(list1,list2))
+#print(cofactor(list1,list2))
