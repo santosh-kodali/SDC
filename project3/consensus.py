@@ -25,6 +25,37 @@ def logical_and (A,B):
 
 	return output1
 
+def display (matrix):
+	
+	flag = 0
+	for i in range(len(matrix)):
+
+		for j in range(len(matrix[0])):
+
+			if(matrix[i][j]=='00'):
+				print("0", end = '')
+				flag = 1
+				break
+			elif matrix[i][j] == '10' :
+				print( chr(97 + j) + "'" , end = '')
+				flag = 1
+
+			elif matrix[i][j] == '01' :
+				print(chr(97 + j) , end = '')
+				flag = 1
+
+			# else:
+			# 	print("1", end = '')
+
+			#if j!= len(matrix[0]):
+			#	print("")
+
+		if i!= len(matrix) - 1:
+			print("+", end = '')		
+	if(flag == 0):
+		print("1\n")
+	else:
+		print("\n")		
 class Queue:
     def __init__(self):
         self.items = []
@@ -227,12 +258,13 @@ def select_tautology(filepath):
 
 
 
-list1=['11','11']
-list2=['01','01']
+list1=['11','11','11']
+list2=['01','01','01']
 
 #ans=select_tautology("input.txt")
 #print(ans)
 consensus=disjoint_sharp(list1,list2)
 
 print (consensus)
+display(consensus)
 #print(cofactor(list1,list2))
