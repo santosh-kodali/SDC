@@ -1,5 +1,6 @@
 import numpy as np
 
+
 print ("Enter number of variabes") #number of variables the function is dependent on
 numbers = input()
 print ("enter splitting order")
@@ -8,6 +9,7 @@ print (order)
 print("Enter the expression")      
 file=open("input.txt","r")        #complements are represented with capital letters
 input1=file.readlines()
+
 
 
 for i in range(len(input1)):
